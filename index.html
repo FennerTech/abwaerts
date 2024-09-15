@@ -13,7 +13,7 @@ Danke und Viel Spaß!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abwärts v1.42</title> <!-- Versionsnummer erhöht auf v1.42 -->
+    <title>Abwärts v1.43</title> <!-- Versionsnummer erhöht auf v1.43 -->
     <!-- SEO Meta-Tags -->
     <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
     <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
@@ -109,15 +109,18 @@ Danke und Viel Spaß!
             height: 100%;
             background-color: #4caf50;
             border-radius: 5px;
+            z-index: 1; /* Sicherstellen, dass sie sichtbar bleibt */
         }
         .time-remaining {
             font-size: 14px;
+            color: #ffffff; /* Farbe verstärken */
             margin-left: 10px;
             display: inline-block;
             position: absolute;
-            right: -50px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
+            z-index: 2; /* Sicherstellen, dass die Zeit sichtbar ist */
         }
         #levelDisplay {
             font-size: 24px;
@@ -286,6 +289,14 @@ Danke und Viel Spaß!
             .progress-container {
                 width: 70%; /* Progressbar-Breite in mobiler Ansicht */
             }
+            .progress-bar {
+                background-color: #4caf50; /* Klarere Farbe für mobiles Gerät */
+            }
+            .time-remaining {
+                font-size: 14px;
+                color: #ffffff;
+                right: 5px; /* Anpassen, um sicherzustellen, dass sie sichtbar ist */
+            }
             .button {
                 font-size: 14px;
                 padding: 8px 15px;
@@ -304,7 +315,7 @@ Danke und Viel Spaß!
         <button class="cookie-decline" id="declineCookies">Ablehnen</button>
     </div>
 
-    <div class="title">Abwärts v1.42</div>
+    <div class="title">Abwärts v1.43</div> <!-- Versionsnummer erhöht -->
     <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
     
     <div class="stars" id="starsDisplay"></div>
@@ -315,7 +326,7 @@ Danke und Viel Spaß!
 
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
-        <div class="time-remaining" id="timeRemaining"></div>
+        <div class="time-remaining" id="timeRemaining"></div> <!-- Deutlichere Positionierung und Farbe -->
     </div>
 
     <div>
