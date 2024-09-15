@@ -13,7 +13,7 @@ Danke und Viel Spaß!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abwärts</title>
+    <title>Abwärts v1.38</title>
     <!-- SEO Meta-Tags -->
     <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
     <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
@@ -269,6 +269,35 @@ Danke und Viel Spaß!
             color: #90ee90;
             text-decoration: none;
         }
+
+        /* Media Queries für mobile Ansicht */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+            }
+            .number {
+                font-size: 70px;
+            }
+            .button {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            .progress-container {
+                width: 60%;
+                height: 15px;
+            }
+            .time-remaining {
+                font-size: 12px;
+                right: -40px;
+            }
+            .visitor-table td {
+                padding: 5px 10px;
+            }
+            .modal-content {
+                width: 90%;
+                max-width: 300px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -279,7 +308,7 @@ Danke und Viel Spaß!
         <button class="cookie-decline" id="declineCookies">Ablehnen</button>
     </div>
 
-    <div class="title">Abwärts v1.37</div>
+    <div class="title">Abwärts v1.38</div>
     <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
     
     <div class="stars" id="starsDisplay"></div>
@@ -299,6 +328,7 @@ Danke und Viel Spaß!
         <button class="button button-green" id="clickButton">Klick!</button>
     </div>
 
+    <!-- Abwesenheitsmodal -->
     <div id="absenceModal" class="absence-modal">
         <div class="absence-modal-content">
             <div class="absence-modal-header">
@@ -309,6 +339,7 @@ Danke und Viel Spaß!
         </div>
     </div>
 
+    <!-- Belohnungsmodal -->
     <div id="rewardModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -321,6 +352,7 @@ Danke und Viel Spaß!
         </div>
     </div>
 
+    <!-- Resetmodal -->
     <div class="modal" id="resetModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -334,6 +366,7 @@ Danke und Viel Spaß!
         </div>
     </div>
 
+    <!-- Impressummodal -->
     <div id="impressumModal" class="modal">
          <div class="modal-content" style="width: 80vw; height: 80vh; text-align: left; overflow-y: auto;">
             <div class="modal-header">
@@ -414,7 +447,7 @@ Danke und Viel Spaß!
         let remainingTime = parseInt(localStorage.getItem('remainingTime')) || 60;
         let savedDateTime = localStorage.getItem('savedDateTime') || null;
         let stars = localStorage.getItem('stars') || '';
-        let absenceMinutes = 0;  // Variable to store absence minutes
+        let absenceMinutes = 0;
 
         starsDisplay.textContent = stars;
 
@@ -437,14 +470,13 @@ Danke und Viel Spaß!
         }
 
         function showAbsenceModal(differenceInMinutes) {
-            absenceMinutes = differenceInMinutes;  // Store the difference in absenceMinutes
+            absenceMinutes = differenceInMinutes;
             absenceMessage.textContent = `In Abwesenheit: -${absenceMinutes}`;
             absenceModal.style.display = 'flex';
         }
 
         document.getElementById('closeAbsenceButton').addEventListener('click', function () {
             absenceModal.style.display = 'none';
-            // Reduce the current number by the absence minutes when closing the modal
             currentNumber -= absenceMinutes;
             updateDisplay();
             if (currentNumber <= 0) {
@@ -674,7 +706,6 @@ Danke und Viel Spaß!
             startProgressInterval();
             updateDisplay();
         };
-
     </script>
     <script language="JavaScript" src="https://www.besucherzaehler-kostenlos.de/js/counter.js.php?count=1&id=fennertech.github.ioabwaerts&start=0&design=6"></script>
 </body>
