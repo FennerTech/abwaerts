@@ -13,7 +13,7 @@ Danke und Viel Spaß!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abwärts v1.38</title>
+    <title>Abwärts v1.41</title>
     <!-- SEO Meta-Tags -->
     <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
     <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
@@ -102,6 +102,7 @@ Danke und Viel Spaß!
             margin: 25px 0;
             height: 20px;
             position: relative;
+            overflow: hidden; /* Ensures that the progress-bar fits correctly */
         }
         .progress-bar {
             width: 0%;
@@ -270,32 +271,24 @@ Danke und Viel Spaß!
             text-decoration: none;
         }
 
-        /* Media Queries für mobile Ansicht */
-        @media (max-width: 768px) {
+        /* Styles für mobile Ansicht */
+        @media only screen and (max-width: 600px) {
             .title {
-                font-size: 32px;
+                font-size: 36px;
+                margin-top: 30px;
             }
             .number {
-                font-size: 70px;
-            }
-            .button {
-                padding: 8px 15px;
-                font-size: 14px;
+                font-size: 80px;
             }
             .progress-container {
-                width: 60%;
-                height: 15px;
+                width: 70%;
             }
-            .time-remaining {
-                font-size: 12px;
-                right: -40px;
-            }
-            .visitor-table td {
-                padding: 5px 10px;
+            .button {
+                font-size: 14px;
+                padding: 8px 15px;
             }
             .modal-content {
-                width: 90%;
-                max-width: 300px;
+                max-width: 90vw;
             }
         }
     </style>
@@ -308,7 +301,7 @@ Danke und Viel Spaß!
         <button class="cookie-decline" id="declineCookies">Ablehnen</button>
     </div>
 
-    <div class="title">Abwärts v1.38</div>
+    <div class="title">Abwärts v1.41</div>
     <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
     
     <div class="stars" id="starsDisplay"></div>
@@ -647,7 +640,15 @@ Danke und Viel Spaß!
         });
 
         document.getElementById('confirmReset').addEventListener('click', function () {
-            localStorage.clear();
+            localStorage.removeItem('currentNumber');
+            localStorage.removeItem('clickCount');
+            localStorage.removeItem('currentLevel');
+            localStorage.removeItem('buttonText');
+            localStorage.removeItem('stars');
+            localStorage.removeItem('savedDateTime');
+            localStorage.removeItem('progress');
+            localStorage.removeItem('remainingTime');
+
             currentNumber = 1000000;
             progress = 0;
             remainingTime = 60;
@@ -706,6 +707,7 @@ Danke und Viel Spaß!
             startProgressInterval();
             updateDisplay();
         };
+
     </script>
     <script language="JavaScript" src="https://www.besucherzaehler-kostenlos.de/js/counter.js.php?count=1&id=fennertech.github.ioabwaerts&start=0&design=6"></script>
 </body>
