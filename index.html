@@ -1,0 +1,682 @@
+<!-- -----------------------------------------------
+Abwärts
+(c) 2024 Marco Fenner
+
+Urheberrechtlich geschützt.
+Kopieren erlaubt.
+Verändern nur mit Namensnennung des Autors ;-)
+Danke und Viel Spaß!
+------------------------------------------------ -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abwärts</title>
+    <!-- SEO Meta-Tags -->
+    <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
+    <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Marco Fenner">
+    <meta name="language" content="Deutsch">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph Meta-Tags -->
+    <meta property="og:title" content="Abwärts - Ein Zero-Player-Game">
+    <meta property="og:description" content="Probiere das spannende Zero-Player-Game von Marco Fenner!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fennertech.github.io/abwaerts/">
+    <meta property="og:image" content="https://fennertech.github.io/abwaerts/preview.jpg">
+    <meta property="og:locale" content="de_DE">
+    
+    <!-- End of SEO Meta-Tags -->
+    <style>
+        body {
+            background-color: #2e2e2e;
+            color: #ffffff;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .title {
+            color: #90ee90;
+            font-weight: bold;
+            font-size: 44px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+        .stars {
+            font-size: 20px;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+        .number {
+            font-size: 100px;
+            color: yellow;
+            margin: 30px 0;
+            transition: font-size 0.5s, transform 0.5s;
+            position: relative;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            display: inline-block;
+            position: relative;
+            z-index: 0;
+        }
+        .button-green {
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+            margin: 20px 10px;
+        }
+        .button-red {
+            background-color: #f44336;
+            color: #ffffff;
+            border: none;
+            margin: 20px 10px;
+        }
+        .button-gray {
+            background-color: #888888;
+            color: #ffffff;
+            border: none;
+            margin: 20px 10px;
+        }
+        .progress-container {
+            width: 30%;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            margin: 25px 0;
+            height: 20px;
+            position: relative;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #4caf50;
+            border-radius: 5px;
+        }
+        .time-remaining {
+            font-size: 14px;
+            margin-left: 10px;
+            display: inline-block;
+            position: absolute;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #levelDisplay {
+            font-size: 24px;
+            margin-top: 15px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            border: 2px solid #d3d3d3;
+        }
+        .modal-content {
+            background-color: #3e3e3e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+        }
+        .modal-content a {
+            color: #4caf50;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .close {
+            cursor: pointer;
+            color: #ffffff;
+            background: none;
+            border: none;
+            font-size: 24px;
+        }
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .cookie-banner button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cookie-accept {
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+        }
+        .cookie-decline {
+            background-color: #f44336;
+            color: #ffffff;
+            border: none;
+        }
+        .visitor-table {
+            margin-top: 40px;
+            border-collapse: collapse;
+            color: #ffffff;
+        }
+        .visitor-table td {
+            padding: 5px 15px;
+        }
+        .visitor-table td:first-child {
+            text-align: left;
+        }
+        .visitor-table td:last-child {
+            text-align: right;
+        }
+        #impressumModal .modal-content {
+            width: 80vw;
+            height: 80vh;
+            text-align: left;
+            overflow-y: auto;
+        }
+        #impressumModal .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .random-button {
+            font-weight: bold;
+            font-size: 24px;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            position: absolute;
+            border: 2px solid #000000;
+        }
+        .random-minus {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .random-plus {
+            background-color: #f44336;
+            color: #ffffff;
+        }
+        .absence-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            border: 2px solid #d3d3d3;
+        }
+        .absence-modal-content {
+            background-color: #3e3e3e;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+        }
+        .absence-modal-header {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .absence-modal-close {
+            cursor: pointer;
+            color: #ffffff;
+            background: none;
+            border: none;
+            font-size: 24px;
+        }
+        .info-section {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .info-section a {
+            color: #90ee90;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cookie-banner" id="cookieBanner">
+        Diese Website verwendet Cookies, um sicherzustellen, dass Sie die beste Erfahrung auf unserer Website erhalten.
+        <button class="cookie-accept" id="acceptCookies">Annehmen</button>
+        <button class="cookie-decline" id="declineCookies">Ablehnen</button>
+    </div>
+
+    <div class="title">Abwärts v1.35</div>
+    <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
+    
+    <div class="stars" id="starsDisplay"></div>
+
+    <div class="number" id="numberDisplay">1.000.000</div>
+
+    <div id="levelDisplay">Level: 1</div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="time-remaining" id="timeRemaining"></div>
+    </div>
+
+    <div>
+        <button class="button button-gray" id="openImpressum">Impressum</button> 
+        <button class="button button-red" id="openReset">Null</button>
+        <button class="button button-green" id="clickButton">Klick!</button>
+    </div>
+
+    <div id="absenceModal" class="absence-modal">
+        <div class="absence-modal-content">
+            <div class="absence-modal-header">
+                <button class="absence-modal-close" id="closeAbsenceModal">X</button>
+            </div>
+            <p id="absenceMessage"></p>
+            <button class="button button-green" id="closeAbsenceButton">OK</button>
+        </div>
+    </div>
+
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" id="closeRewardModal">X</button>
+            </div>
+            <p>Herzlichen Glückwunsch! Level geschafft!</p>
+            <div class="modal-buttons">
+                <button class="button button-green" id="rewardModalButton">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" id="closeResetModal">X</button>
+            </div>
+            <p>Wirklich alles zurücksetzen?</p>
+            <div class="modal-buttons">
+                <button class="button button-red" id="confirmReset">Ja</button>
+                <button class="button button-green" id="cancelReset">Nein</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="impressumModal" class="modal">
+         <div class="modal-content" style="width: 80vw; height: 80vh; text-align: left; overflow-y: auto;">
+            <div class="modal-header">
+                <button class="close" id="closeImpressumModal">&times;</button>
+            </div>
+            <h2>Impressum</h2>
+            <p><strong>Angaben gemäß § 5 TMG</strong></p>
+            <p><strong>Betreiber der Website:</strong><br> Marco Fenner<br> Wiardastraße 19<br> 26603 Aurich<br> Deutschland</p>
+            <p><strong>Kontakt:</strong><br> E-Mail: <a href="mailto:datenschrauber@posteo.de">datenschrauber@posteo.de</a><br> Telefon: +49 1573 004 2105</p>
+            <p><strong>Vielen Dank für den Besuch meiner Website.<br>Wenn Sie Ihnen gefallen hat, würde ich mich über eine kurze Nachricht sehr freuen.</strong> 😊</p>
+
+            <h3>Haftungsausschluss:</h3>
+            <p><strong>Haftung für Inhalte</strong><br> Als Diensteanbieter bin ich gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.</p>
+
+            <p><strong>Haftung für Links</strong><br> Mein Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werde ich derartige Links umgehend entfernen.</p>
+
+            <p><strong>Urheberrecht</strong><br> Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitte ich um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werde ich diese Inhalte umgehend entfernen.</p>
+
+            <h3>Datenschutz:</h3>
+            <p>Die Nutzung meiner Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Soweit auf meinen Seiten personenbezogene Daten (beispielsweise Name, Anschrift oder E-Mail-Adressen) erhoben werden, erfolgt dies, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben. Ich weise darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.</p>
+
+            <h3>Besucherzähler von besucherzaehler-kostenlos.de</h3>
+
+            <p>Diese Webseite verwendet einen externen Zähler, um die Anzahl der Webseitenaufrufe zu erfassen. Dafür wird ein Java-Script von einer externe Webseite geladen. Der Server von <a href="https://www.besucherzaehler-kostenlos.de">besucherzaehler-kostenlos.de</a> speichert die IP-Adresse des Zugriffs anonymisiert und zeitlich begrenzt in einer LOG-Datei ab. Diese wird regelmäßig unwiderruflich gelöscht.</p>
+
+            <p>Um die korrekte Funktionsweise des Zählers zu gewährleisten, speichert der Besucherzähler zudem einen sogenannten Session-Cookie auf dem Computer des Besuchers ab. Dieser wird in der Regel vom Browser gelöscht, sobald er geschlossen wird. In diesem Cookie werden keine persönlichen Informationen gespeichert. Er enthält lediglich die Information der aufgerufenen Domain, sowie einen boolschen Tag (true/false), um den Besucher als bereits gezählt zu markieren.</p>
+
+            <p>Es werden auch darüberhinaus keine persönlichen oder personenbezogenen Daten vom Besucherzähler erhoben. Eine Nachverfolgung oder Zuordnung der Zugriffe ist zu keiner Zeit möglich. Ein besonderer Dank geht an <a href="https://www.howtodocentral.com">www.howtodocentral.com</a>, durch dessen Unterstützung dieser kostenlose Service erst möglich gemacht wird.</p>
+
+            <h3>Einsehbarkeit des Quellcodes:</h3>
+            <p>Der Quellcode dieser Seite ist vollständig für jedermann einsehbar.</p>
+        </div>
+    </div>
+
+    <table class="visitor-table">
+        <tr>
+            <td>Aktuell online:</td>
+            <td><span class="BZonline"></span></td>
+        </tr>
+        <tr>
+            <td>Besucher heute:</td>
+            <td><span class="BZheute"></span></td>
+        </tr>
+        <tr>
+            <td>Besucher gestern:</td>
+            <td><span class="BZgestern"></span></td>
+        </tr>
+        <tr>
+            <td>Besucher gesamt:</td>
+            <td><span class="BZgesamt"></span></td>
+        </tr>
+        <tr>
+            <td>Besucher seit:</td>
+            <td><span class="BZseit"></span></td>
+        </tr>
+    </table>
+
+    <div class="info-section">
+        <p>Probieren Sie auch:</p>
+        <p><a href="https://fennertech.github.io/feierabend/" target="_blank">> Feierabend-Countdown v2.0</a></p>
+        <p><a href="https://fennertech.github.io/leerlauf/" target="_blank">> Leerlauf v1.52</a></p>
+    </div>
+
+    <script>
+        const numberDisplay = document.getElementById('numberDisplay');
+        const clickButton = document.getElementById('clickButton');
+        const progressBar = document.getElementById('progressBar');
+        const timeRemainingDisplay = document.getElementById('timeRemaining');
+        const resetModal = document.getElementById('resetModal');
+        const starsDisplay = document.getElementById('starsDisplay');
+        const rewardModal = document.getElementById('rewardModal');
+        const absenceModal = document.getElementById('absenceModal');
+        const absenceMessage = document.getElementById('absenceMessage');
+        let currentLevel = 1;
+        let currentNumber = parseInt(localStorage.getItem('currentNumber')) || 1000000;
+        let clickCount = parseInt(localStorage.getItem('clickCount')) || 0;
+        let progress = parseInt(localStorage.getItem('progress')) || 0;
+        let remainingTime = parseInt(localStorage.getItem('remainingTime')) || 60;
+        let savedDateTime = localStorage.getItem('savedDateTime') || null;
+        let stars = localStorage.getItem('stars') || '';
+        let absenceMinutes = 0;  // Variable to store absence minutes
+
+        starsDisplay.textContent = stars;
+
+        window.onbeforeunload = function () {
+            const currentDate = new Date().toISOString();
+            localStorage.setItem('currentNumber', currentNumber);
+            localStorage.setItem('clickCount', clickCount);
+            localStorage.setItem('currentLevel', currentLevel);
+            localStorage.setItem('buttonText', clickButton.textContent);
+            localStorage.setItem('stars', starsDisplay.textContent);
+            localStorage.setItem('savedDateTime', currentDate);
+        };
+
+        function calculateTimeDifference(previousDateTime) {
+            const previousDate = new Date(previousDateTime);
+            const currentDate = new Date();
+            const differenceInMs = currentDate - previousDate;
+            const differenceInMinutes = Math.floor(differenceInMs / 60000);
+            return differenceInMinutes;
+        }
+
+        function showAbsenceModal(differenceInMinutes) {
+            absenceMinutes = differenceInMinutes;  // Store the difference in absenceMinutes
+            absenceMessage.textContent = `In Abwesenheit: -${absenceMinutes}`;
+            absenceModal.style.display = 'flex';
+        }
+
+        document.getElementById('closeAbsenceButton').addEventListener('click', function () {
+            absenceModal.style.display = 'none';
+            // Reduce the current number by the absence minutes when closing the modal
+            currentNumber -= absenceMinutes;
+            updateDisplay();
+            if (currentNumber <= 0) {
+                levelUp();
+            }
+        });
+
+        function restoreSavedData() {
+            const savedNumber = localStorage.getItem('currentNumber');
+            const savedLevel = localStorage.getItem('currentLevel');
+            const savedButtonText = localStorage.getItem('buttonText');
+            const savedStars = localStorage.getItem('stars');
+
+            if (savedNumber !== null) {
+                currentNumber = parseInt(savedNumber);
+                updateDisplay();
+            }
+
+            if (savedLevel !== null) {
+                currentLevel = parseInt(savedLevel);
+                document.getElementById('levelDisplay').textContent = "Level: " + currentLevel;
+            }
+
+            if (savedButtonText !== null) {
+                clickButton.textContent = savedButtonText;
+            }
+
+            if (savedStars !== null) {
+                starsDisplay.textContent = savedStars;
+            }
+
+            if (savedDateTime !== null) {
+                const timeDifference = calculateTimeDifference(savedDateTime);
+                if (timeDifference > 0) {
+                    showAbsenceModal(timeDifference);
+                }
+            }
+        }
+
+        function updateDisplay() {
+            numberDisplay.textContent = currentNumber.toLocaleString();
+            document.title = `${currentNumber.toLocaleString()} - Abwärts`;
+        }
+
+        clickButton.addEventListener('click', function () {
+            currentNumber--;
+            updateDisplay();
+
+            clickCount++;
+            clickButton.textContent = clickCount;
+            localStorage.setItem('clickCount', clickCount);
+            localStorage.setItem('currentNumber', currentNumber);
+
+            if (currentNumber <= 0) {
+                levelUp();
+            }
+        });
+
+        function levelUp() {
+            rewardModal.style.display = 'flex';
+            currentLevel++;
+            document.getElementById('levelDisplay').textContent = "Level: " + currentLevel;
+            currentNumber = 1000000;
+            updateDisplay();
+            addStar();
+        }
+
+        function addStar() {
+            stars += '★';
+            starsDisplay.textContent = stars;
+            localStorage.setItem('stars', stars);
+        }
+
+        function updateProgressBar() {
+            progress++;
+            remainingTime--;
+
+            progressBar.style.width = `${(progress / 60) * 100}%`;
+            timeRemainingDisplay.textContent = `${remainingTime}`;
+            localStorage.setItem('progress', progress);
+            localStorage.setItem('remainingTime', remainingTime);
+
+            if (progress >= 60) {
+                progress = 0;
+                remainingTime = 60;
+
+                numberDisplay.style.transform = "scale(1.1)";
+                setTimeout(() => numberDisplay.style.transform = "scale(1)", 500);
+
+                currentNumber--;
+                updateDisplay();
+
+                if (currentNumber <= 0) {
+                    levelUp();
+                }
+            }
+        }
+
+        function startProgressInterval() {
+            setInterval(updateProgressBar, 1000);
+        }
+
+        function createRandomButton() {
+            if (document.getElementById('randomButton')) return;
+
+            const isPositiveButton = Math.random() < 0.1;
+            const randomValue = Math.floor(Math.random() * 20) + 1;
+            const button = document.createElement('button');
+            button.id = 'randomButton';
+
+            if (isPositiveButton) {
+                button.textContent = `+${randomValue}`;
+                button.classList.add('random-button', 'random-plus');
+            } else {
+                button.textContent = `-${randomValue}`;
+                button.classList.add('random-button', 'random-minus');
+            }
+
+            button.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            button.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+
+            button.addEventListener('click', () => {
+                moveButtonToCenter(button, randomValue, isPositiveButton);
+            });
+
+            document.body.appendChild(button);
+
+            setTimeout(() => {
+                if (document.getElementById('randomButton')) {
+                    document.getElementById('randomButton').remove();
+                }
+            }, 10000);
+        }
+
+        function moveButtonToCenter(button, value, isPositiveButton) {
+            const buttonRect = button.getBoundingClientRect();
+            const numberRect = numberDisplay.getBoundingClientRect();
+            const centerX = numberRect.left + numberRect.width / 2 - button.offsetWidth / 2;
+            const centerY = numberRect.top + numberRect.height / 2 - button.offsetHeight / 2;
+
+            button.style.transition = 'left 0.5s ease, top 0.5s ease';
+            button.style.left = `${centerX}px`;
+            button.style.top = `${centerY}px`;
+
+            setTimeout(() => {
+                if (isPositiveButton) {
+                    currentNumber += value;
+                } else {
+                    currentNumber -= value;
+                }
+
+                if (currentNumber <= 0) {
+                    levelUp();
+                }
+                updateDisplay();
+                button.remove();
+            }, 500);
+        }
+
+        setInterval(createRandomButton, Math.random() * 10000 + 10000);
+
+        document.getElementById('openReset').addEventListener('click', function () {
+            resetModal.style.display = 'flex';
+        });
+
+        document.getElementById('closeResetModal').addEventListener('click', function () {
+            resetModal.style.display = 'none';
+        });
+
+        document.getElementById('confirmReset').addEventListener('click', function () {
+            localStorage.clear();
+            currentNumber = 1000000;
+            progress = 0;
+            remainingTime = 60;
+            clickCount = 0;
+            currentLevel = 1;
+            stars = '';
+            document.getElementById('levelDisplay').textContent = "Level: 1";
+            clickButton.textContent = "Klick!";
+            starsDisplay.textContent = '';
+            updateDisplay();
+            resetModal.style.display = 'none';
+        });
+
+        document.getElementById('cancelReset').addEventListener('click', function () {
+            resetModal.style.display = 'none';
+        });
+
+        document.getElementById('openImpressum').addEventListener('click', function () {
+            document.getElementById('impressumModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeImpressumModal').addEventListener('click', function () {
+            document.getElementById('impressumModal').style.display = 'none';
+        });
+
+        document.getElementById('acceptCookies').addEventListener('click', function () {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').style.display = 'none';
+        });
+
+        document.getElementById('declineCookies').addEventListener('click', function () {
+            localStorage.setItem('cookiesAccepted', 'false');
+            document.body.innerHTML = `
+                Sie haben die Cookies abgelehnt. Die Seite kann nicht angezeigt werden.<br><br>
+                <button class="button button-green" onclick="retryCookies()">Nochmal fragen!</button>`;
+        });
+
+        function retryCookies() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        document.getElementById('closeRewardModal').addEventListener('click', function () {
+            rewardModal.style.display = 'none';
+        });
+
+        document.getElementById('rewardModalButton').addEventListener('click', function () {
+            rewardModal.style.display = 'none';
+        });
+
+        window.onload = function () {
+            if (localStorage.getItem('cookiesAccepted') === 'true') {
+                document.getElementById('cookieBanner').style.display = 'none';
+            }
+            restoreSavedData();
+            startProgressInterval();
+            updateDisplay();
+        };
+
+    </script>
+    <script language="JavaScript" src="https://www.besucherzaehler-kostenlos.de/js/counter.js.php?count=1&id=fennertech.github.ioabwaerts&start=0&design=6"></script>
+</body>
+</html>
+
