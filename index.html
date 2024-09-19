@@ -6,6 +6,8 @@ Urheberrechtlich geschützt.
 Kopieren erlaubt.
 Verändern nur mit Namensnennung des Autors ;-)
 Danke und Viel Spaß!
+
+Revision: 1.44
 ------------------------------------------------ -->
 
 <!DOCTYPE html>
@@ -13,7 +15,7 @@ Danke und Viel Spaß!
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abwärts v1.43</title> <!-- Versionsnummer erhöht auf v1.43 -->
+    <title>Abwärts v1.44</title> <!-- Versionsnummer erhöht auf v1.44 -->
     <!-- SEO Meta-Tags -->
     <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
     <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
@@ -109,18 +111,18 @@ Danke und Viel Spaß!
             height: 100%;
             background-color: #4caf50;
             border-radius: 5px;
-            z-index: 1; /* Sicherstellen, dass sie sichtbar bleibt */
+            z-index: 1;
         }
         .time-remaining {
             font-size: 14px;
-            color: #ffffff; /* Farbe verstärken */
+            color: #ffffff;
             margin-left: 10px;
             display: inline-block;
             position: absolute;
             right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            z-index: 2; /* Sicherstellen, dass die Zeit sichtbar ist */
+            z-index: 2;
         }
         #levelDisplay {
             font-size: 24px;
@@ -277,7 +279,7 @@ Danke und Viel Spaß!
         /* Styles für mobile Ansicht */
         @media only screen and (max-width: 600px) {
             body {
-                padding-top: 10px; /* Leerzeile für bessere Lesbarkeit */
+                padding-top: 10px;
             }
             .title {
                 font-size: 36px;
@@ -287,15 +289,15 @@ Danke und Viel Spaß!
                 font-size: 80px;
             }
             .progress-container {
-                width: 70%; /* Progressbar-Breite in mobiler Ansicht */
+                width: 70%;
             }
             .progress-bar {
-                background-color: #4caf50; /* Klarere Farbe für mobiles Gerät */
+                background-color: #4caf50;
             }
             .time-remaining {
                 font-size: 14px;
                 color: #ffffff;
-                right: 5px; /* Anpassen, um sicherzustellen, dass sie sichtbar ist */
+                right: 5px;
             }
             .button {
                 font-size: 14px;
@@ -315,7 +317,7 @@ Danke und Viel Spaß!
         <button class="cookie-decline" id="declineCookies">Ablehnen</button>
     </div>
 
-    <div class="title">Abwärts v1.43</div> <!-- Versionsnummer erhöht -->
+    <div class="title">Abwärts v1.44</div> <!-- Versionsnummer erhöht -->
     <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
     
     <div class="stars" id="starsDisplay"></div>
@@ -326,7 +328,7 @@ Danke und Viel Spaß!
 
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
-        <div class="time-remaining" id="timeRemaining"></div> <!-- Deutlichere Positionierung und Farbe -->
+        <div class="time-remaining" id="timeRemaining"></div>
     </div>
 
     <div>
@@ -375,7 +377,7 @@ Danke und Viel Spaß!
 
     <!-- Impressummodal -->
     <div id="impressumModal" class="modal">
-         <div class="modal-content" style="width: 80vw; height: 80vh; text-align: left; overflow-y: auto;">
+         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" id="closeImpressumModal">&times;</button>
             </div>
@@ -405,6 +407,8 @@ Danke und Viel Spaß!
 
             <h3>Einsehbarkeit des Quellcodes:</h3>
             <p>Der Quellcode dieser Seite ist vollständig für jedermann einsehbar.</p>
+
+
         </div>
     </div>
 
@@ -448,28 +452,30 @@ Danke und Viel Spaß!
         const absenceModal = document.getElementById('absenceModal');
         const absenceMessage = document.getElementById('absenceMessage');
         let currentLevel = 1;
-        let currentNumber = parseInt(localStorage.getItem('abwaerts_currentNumber')) || 1000000; // Variable spezifisch für dieses Spiel
-        let clickCount = parseInt(localStorage.getItem('abwaerts_clickCount')) || 0; // Spezifische Variable
-        let progress = parseInt(localStorage.getItem('abwaerts_progress')) || 0; // Spezifische Variable
-        let remainingTime = parseInt(localStorage.getItem('abwaerts_remainingTime')) || 60; // Spezifische Variable
+        let currentNumber = parseInt(localStorage.getItem('abwaerts_currentNumber')) || 1000000;
+        let clickCount = parseInt(localStorage.getItem('abwaerts_clickCount')) || 0;
+        let remainingTime = parseFloat(localStorage.getItem('abwaerts_remainingTime')) || 60;
         let savedDateTime = localStorage.getItem('abwaerts_savedDateTime') || null;
-        let stars = localStorage.getItem('abwaerts_stars') || ''; // Spezifische Variable
+        let stars = localStorage.getItem('abwaerts_stars') || '';
+        let lastUpdateTime = parseInt(localStorage.getItem('abwaerts_lastUpdateTime')) || Date.now();
         let absenceMinutes = 0;
 
         starsDisplay.textContent = stars;
 
-        window.onbeforeunload = function () {
-            const currentDate = new Date().toISOString();
-            localStorage.setItem('abwaerts_currentNumber', currentNumber); // Spezifische Variable
-            localStorage.setItem('abwaerts_clickCount', clickCount); // Spezifische Variable
+        window.addEventListener('beforeunload', function () {
+            const currentDate = Date.now();
+            localStorage.setItem('abwaerts_currentNumber', currentNumber);
+            localStorage.setItem('abwaerts_clickCount', clickCount);
             localStorage.setItem('abwaerts_currentLevel', currentLevel);
             localStorage.setItem('abwaerts_buttonText', clickButton.textContent);
-            localStorage.setItem('abwaerts_stars', starsDisplay.textContent); // Spezifische Variable
+            localStorage.setItem('abwaerts_stars', starsDisplay.textContent);
             localStorage.setItem('abwaerts_savedDateTime', currentDate);
-        };
+            localStorage.setItem('abwaerts_remainingTime', remainingTime);
+            localStorage.setItem('abwaerts_lastUpdateTime', currentDate);
+        });
 
         function calculateTimeDifference(previousDateTime) {
-            const previousDate = new Date(previousDateTime);
+            const previousDate = new Date(parseInt(previousDateTime));
             const currentDate = new Date();
             const differenceInMs = currentDate - previousDate;
             const differenceInMinutes = Math.floor(differenceInMs / 60000);
@@ -478,24 +484,31 @@ Danke und Viel Spaß!
 
         function showAbsenceModal(differenceInMinutes) {
             absenceMinutes = differenceInMinutes;
-            absenceMessage.textContent = `In Abwesenheit: -${absenceMinutes}`;
-            absenceModal.style.display = 'flex';
+            if (absenceMinutes > 0) {
+                absenceMessage.textContent = `In Abwesenheit: -${absenceMinutes}`;
+                absenceModal.style.display = 'flex';
+            } else {
+                absenceMinutes = 0;
+            }
         }
 
         document.getElementById('closeAbsenceButton').addEventListener('click', function () {
             absenceModal.style.display = 'none';
             currentNumber -= absenceMinutes;
-            updateDisplay();
             if (currentNumber <= 0) {
                 levelUp();
+            } else {
+                updateDisplay();
             }
         });
 
         function restoreSavedData() {
-            const savedNumber = localStorage.getItem('abwaerts_currentNumber'); // Spezifische Variable
-            const savedLevel = localStorage.getItem('abwaerts_currentLevel'); // Spezifische Variable
-            const savedButtonText = localStorage.getItem('abwaerts_buttonText'); // Spezifische Variable
-            const savedStars = localStorage.getItem('abwaerts_stars'); // Spezifische Variable
+            const savedNumber = localStorage.getItem('abwaerts_currentNumber');
+            const savedLevel = localStorage.getItem('abwaerts_currentLevel');
+            const savedButtonText = localStorage.getItem('abwaerts_buttonText');
+            const savedStars = localStorage.getItem('abwaerts_stars');
+            const savedRemainingTime = localStorage.getItem('abwaerts_remainingTime');
+            const savedLastUpdateTime = localStorage.getItem('abwaerts_lastUpdateTime');
 
             if (savedNumber !== null) {
                 currentNumber = parseInt(savedNumber);
@@ -515,12 +528,30 @@ Danke und Viel Spaß!
                 starsDisplay.textContent = savedStars;
             }
 
-            if (savedDateTime !== null) {
+            if (savedRemainingTime !== null) {
+                remainingTime = parseFloat(savedRemainingTime);
+            }
+
+            if (savedLastUpdateTime !== null) {
+                lastUpdateTime = parseInt(savedLastUpdateTime);
+                let timeElapsedMs = Date.now() - lastUpdateTime;
+                let totalMinutesPassed = Math.floor(timeElapsedMs / 60000);
+
+                currentNumber -= totalMinutesPassed;
+
+                if (currentNumber <= 0) {
+                    levelUp();
+                } else {
+                    updateDisplay();
+                }
+            } else if (savedDateTime !== null) {
                 const timeDifference = calculateTimeDifference(savedDateTime);
                 if (timeDifference > 0) {
                     showAbsenceModal(timeDifference);
                 }
             }
+
+            lastUpdateTime = Date.now();
         }
 
         function updateDisplay() {
@@ -534,8 +565,8 @@ Danke und Viel Spaß!
 
             clickCount++;
             clickButton.textContent = clickCount;
-            localStorage.setItem('abwaerts_clickCount', clickCount); // Spezifische Variable
-            localStorage.setItem('abwaerts_currentNumber', currentNumber); // Spezifische Variable
+            localStorage.setItem('abwaerts_clickCount', clickCount);
+            localStorage.setItem('abwaerts_currentNumber', currentNumber);
 
             if (currentNumber <= 0) {
                 levelUp();
@@ -547,6 +578,7 @@ Danke und Viel Spaß!
             currentLevel++;
             document.getElementById('levelDisplay').textContent = "Level: " + currentLevel;
             currentNumber = 1000000;
+            remainingTime = 60;
             updateDisplay();
             addStar();
         }
@@ -554,32 +586,34 @@ Danke und Viel Spaß!
         function addStar() {
             stars += '★';
             starsDisplay.textContent = stars;
-            localStorage.setItem('abwaerts_stars', stars); // Spezifische Variable
+            localStorage.setItem('abwaerts_stars', stars);
         }
 
         function updateProgressBar() {
-            progress++;
-            remainingTime--;
+            let now = Date.now();
+            let elapsedMs = now - lastUpdateTime;
+            lastUpdateTime = now;
 
-            progressBar.style.width = `${(progress / 60) * 100}%`;
-            timeRemainingDisplay.textContent = `${remainingTime}`;
-            localStorage.setItem('abwaerts_progress', progress); // Spezifische Variable
-            localStorage.setItem('abwaerts_remainingTime', remainingTime); // Spezifische Variable
+            let elapsedSeconds = Math.floor(elapsedMs / 1000);
 
-            if (progress >= 60) {
-                progress = 0;
+            remainingTime -= elapsedSeconds;
+
+            if (remainingTime <= 0) {
                 remainingTime = 60;
-
-                numberDisplay.style.transform = "scale(1.1)";
-                setTimeout(() => numberDisplay.style.transform = "scale(1)", 500);
-
                 currentNumber--;
-                updateDisplay();
 
                 if (currentNumber <= 0) {
                     levelUp();
+                } else {
+                    updateDisplay();
                 }
             }
+
+            progressBar.style.width = `${((60 - remainingTime) / 60) * 100}%`;
+            timeRemainingDisplay.textContent = `${remainingTime}`;
+            localStorage.setItem('abwaerts_remainingTime', remainingTime);
+            localStorage.setItem('abwaerts_currentNumber', currentNumber);
+            localStorage.setItem('abwaerts_lastUpdateTime', now);
         }
 
         function startProgressInterval() {
@@ -654,17 +688,16 @@ Danke und Viel Spaß!
         });
 
         document.getElementById('confirmReset').addEventListener('click', function () {
-            localStorage.removeItem('abwaerts_currentNumber'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_clickCount'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_currentLevel'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_buttonText'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_stars'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_savedDateTime'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_progress'); // Spezifische Variable
-            localStorage.removeItem('abwaerts_remainingTime'); // Spezifische Variable
+            localStorage.removeItem('abwaerts_currentNumber');
+            localStorage.removeItem('abwaerts_clickCount');
+            localStorage.removeItem('abwaerts_currentLevel');
+            localStorage.removeItem('abwaerts_buttonText');
+            localStorage.removeItem('abwaerts_stars');
+            localStorage.removeItem('abwaerts_savedDateTime');
+            localStorage.removeItem('abwaerts_remainingTime');
+            localStorage.removeItem('abwaerts_lastUpdateTime');
 
             currentNumber = 1000000;
-            progress = 0;
             remainingTime = 60;
             clickCount = 0;
             currentLevel = 1;
@@ -718,8 +751,8 @@ Danke und Viel Spaß!
                 document.getElementById('cookieBanner').style.display = 'none';
             }
             restoreSavedData();
-            startProgressInterval();
             updateDisplay();
+            startProgressInterval();
         };
 
     </script>
