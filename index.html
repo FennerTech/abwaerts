@@ -1,5 +1,5 @@
 <!-- -----------------------------------------------
-Abwärts
+Abwärts v1.46
 (c) 2024 Marco Fenner
 
 Urheberrechtlich geschützt.
@@ -7,7 +7,6 @@ Kopieren erlaubt.
 Verändern nur mit Namensnennung des Autors ;-)
 Danke und Viel Spaß!
 
-Revision: 1.44
 ------------------------------------------------ -->
 
 <!DOCTYPE html>
@@ -15,7 +14,7 @@ Revision: 1.44
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abwärts v1.44</title> <!-- Versionsnummer erhöht auf v1.44 -->
+    <title>Abwärts v1.46</title>
     <!-- SEO Meta-Tags -->
     <meta name="description" content="Abwärts ist ein spannendes Zero-Player-Game von Marco Fenner. Mach mit und sieh, wie weit du kommst!">
     <meta name="keywords" content="Abwärts, Zero-Player-Game, Marco Fenner, Spiel, Spaß, Browsergame">
@@ -146,7 +145,7 @@ Revision: 1.44
             padding: 20px;
             border-radius: 10px;
             width: 100%;
-            max-width: 400px;
+            // max-width: 400px;
             text-align: center;
             border: 1px solid #d3d3d3;
         }
@@ -206,7 +205,7 @@ Revision: 1.44
             text-align: right;
         }
         #impressumModal .modal-content {
-            width: 80vw;
+            width: 60vw;
             height: 80vh;
             text-align: left;
             overflow-y: auto;
@@ -250,7 +249,8 @@ Revision: 1.44
             background-color: #3e3e3e;
             padding: 20px;
             border-radius: 10px;
-            width: 100%;
+            // width: 100%;
+            width: 50vw;
             max-width: 400px;
             text-align: center;
             border: 1px solid #d3d3d3;
@@ -317,7 +317,7 @@ Revision: 1.44
         <button class="cookie-decline" id="declineCookies">Ablehnen</button>
     </div>
 
-    <div class="title">Abwärts v1.44</div> <!-- Versionsnummer erhöht -->
+    <div class="title">Abwärts v1.46</div>
     <div class="subtitle">Ein Zero-Player-Game vom <a href="mailto:datenschrauber@posteo.de" style="color: #4caf50;">Datenschrauber</a></div>
     
     <div class="stars" id="starsDisplay"></div>
@@ -354,7 +354,7 @@ Revision: 1.44
             <div class="modal-header">
                 <button class="close" id="closeRewardModal">X</button>
             </div>
-            <p>Herzlichen Glückwunsch! Level geschafft!</p>
+            <p><br><h3>Herzlichen Glückwunsch!</h3>😊<br><br>Level geschafft!</p>
             <div class="modal-buttons">
                 <button class="button button-green" id="rewardModalButton">Weiter</button>
             </div>
@@ -407,8 +407,6 @@ Revision: 1.44
 
             <h3>Einsehbarkeit des Quellcodes:</h3>
             <p>Der Quellcode dieser Seite ist vollständig für jedermann einsehbar.</p>
-
-
         </div>
     </div>
 
@@ -485,7 +483,7 @@ Revision: 1.44
         function showAbsenceModal(differenceInMinutes) {
             absenceMinutes = differenceInMinutes;
             if (absenceMinutes > 0) {
-                absenceMessage.textContent = `In Abwesenheit: -${absenceMinutes}`;
+                absenceMessage.innerHTML = `<p>In Abwesenheit:<p><h2>-${absenceMinutes}</h2>`;
                 absenceModal.style.display = 'flex';
             } else {
                 absenceMinutes = 0;
@@ -532,7 +530,13 @@ Revision: 1.44
                 remainingTime = parseFloat(savedRemainingTime);
             }
 
-            if (savedLastUpdateTime !== null) {
+            // Zuerst prüfen, ob savedDateTime vorhanden ist
+            if (savedDateTime !== null) {
+                const timeDifference = calculateTimeDifference(savedDateTime);
+                if (timeDifference > 0) {
+                    showAbsenceModal(timeDifference);
+                }
+            } else if (savedLastUpdateTime !== null) {
                 lastUpdateTime = parseInt(savedLastUpdateTime);
                 let timeElapsedMs = Date.now() - lastUpdateTime;
                 let totalMinutesPassed = Math.floor(timeElapsedMs / 60000);
@@ -543,11 +547,6 @@ Revision: 1.44
                     levelUp();
                 } else {
                     updateDisplay();
-                }
-            } else if (savedDateTime !== null) {
-                const timeDifference = calculateTimeDifference(savedDateTime);
-                if (timeDifference > 0) {
-                    showAbsenceModal(timeDifference);
                 }
             }
 
@@ -722,9 +721,14 @@ Revision: 1.44
         });
 
         document.getElementById('acceptCookies').addEventListener('click', function () {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieBanner').style.display = 'none';
-        });
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookieBanner').style.display = 'none';
+    
+    restoreSavedData();
+    updateDisplay();
+    startProgressInterval();
+});
+
 
         document.getElementById('declineCookies').addEventListener('click', function () {
             localStorage.setItem('cookiesAccepted', 'false');
@@ -747,13 +751,18 @@ Revision: 1.44
         });
 
         window.onload = function () {
-            if (localStorage.getItem('cookiesAccepted') === 'true') {
-                document.getElementById('cookieBanner').style.display = 'none';
-            }
-            restoreSavedData();
-            updateDisplay();
-            startProgressInterval();
-        };
+    	if (localStorage.getItem('cookiesAccepted') === 'true') {
+        	document.getElementById('cookieBanner').style.display = 'none';
+        	restoreSavedData();
+        	updateDisplay();
+        	startProgressInterval();
+    	} else {
+        	updateDisplay();
+    	}
+	};
+
+           
+        
 
     </script>
     <script language="JavaScript" src="https://www.besucherzaehler-kostenlos.de/js/counter.js.php?count=1&id=fennertech.github.ioabwaerts&start=0&design=6"></script>
